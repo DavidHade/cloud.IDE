@@ -24,9 +24,9 @@ const exports = await getAssemblyExports(config.mainAssemblyName);
 //await dotnetRuntime.runMain(config.mainAssemblyName, ["arg1", "arg2", "arg3"]);
 
 export async function run(src) {
-    await exports.CSharp_Wasm.Compiler.Compile(src);
+    await exports.WASM.Compiler.Compile(src);
 }
 
 export async function preload(){
-    await exports.CSharp_Wasm.Compiler.PreloadReferences();
+    await exports.WASM.Compiler.PreloadReferences();
 }
