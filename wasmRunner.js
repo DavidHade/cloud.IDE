@@ -1,6 +1,6 @@
 // note that it expects to load dotnet.js 
 // (and wasm files) from _framework folder
-import { dotnet } from '/cloud.IDE/wwwroot/_framework/dotnet.js'
+import { dotnet } from "/wwwroot/_framework/dotnet.js"
 
 const is_browser = typeof window != "undefined";
 if (!is_browser) throw new Error(`Expected to be running in a browser`);
