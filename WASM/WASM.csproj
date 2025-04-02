@@ -17,6 +17,7 @@
 
     <ItemGroup>
         <Content Include="index.html" CopyToOutputDirectory="Always" />
+        <Content Include="favicon.ico" CopyToOutputDirectory="Always" />
         <Content Include="wasmRunner.js" CopyToOutputDirectory="Always" />
         <Content Include="logger.js" CopyToOutputDirectory="Always" />
     </ItemGroup>
