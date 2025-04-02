@@ -1,0 +1,307 @@
+<html>
+<head>
+    <!-- Using Prism.js for reliable syntax highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #d4d4d4;
+            margin: 0 auto;
+            padding: 20px 30px 20px 0;
+            color: #d4d4d4;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            max-width: 95vw;
+            margin: 0 auto;
+            gap: 20px;
+        }
+        
+        .child {
+            background-color: #3e3e42;
+            border-radius: 4px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border: 1px solid #3e3e42;
+        }
+        
+        .console{
+            min-width: 100%;
+            min-height: 200px;
+            height: calc(40vh - 5px);
+        }
+
+        /* Editor Container */
+        .editor-container {
+            position: relative;
+            height: 70vh;
+            overflow: hidden;
+        }
+
+        /* Textarea that's actually editable */
+        #code {
+            width: 100%;
+            height: 100%;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            background-color: #252526;
+            color: #d4d4d4;
+            caret-color: #d4d4d4;
+            resize: none;
+            tab-size: 4;
+            line-height: 1.5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            margin: 0;
+            padding: 10px 15px 10px 45px;
+            border: none;
+            outline: none;
+            white-space: pre;
+        }
+
+        /* Syntax highlighted overlay */
+        #highlighted-code {
+            width: 100%;
+            height: calc(100% - 20px);
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            background-color: transparent;
+            color: transparent;
+            resize: none;
+            tab-size: 4;
+            line-height: 1.5;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 2;
+            margin: 0;
+            padding: 10px 15px 10px 45px;
+            pointer-events: none;
+            white-space: pre;
+            overflow: hidden;
+        }
+
+        /* Console Styles */
+        .log-content {
+            height: calc(35vh - 35px);
+            background-color: #252526;
+            color: #d4d4d4;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            border: 1px solid #3e3e42;
+        }
+
+        /* Button Styles */
+        #run {
+            background-color: #0e639c;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+            margin-top: 12px;
+            cursor: pointer;
+            border-radius: 2px;
+            transition: background-color 0.2s;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #run:hover {
+            background-color: #1177bb;
+        }
+
+        /* Line numbers */
+        .line-numbers {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            height: calc(100% - 20px);
+            overflow: hidden;
+            z-index: 5;
+            padding-right: 10px;
+            text-align: right;
+            color: #858585;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            user-select: none;
+        }
+
+        /* Visual Studio-like syntax highlighting */
+        .token.keyword { color: #569cd6 !important; }
+        .token.type { color: #4ec9b0 !important; }
+        .token.string { color: #ce9178 !important; }
+        .token.comment { color: #6a9955 !important; }
+        .token.number { color: #b5cea8 !important; }
+        .token.punctuation { color: #d4d4d4 !important; }
+        .token.method { color: #dbdb93 !important; }
+        .token.namespace { color: #d4d4d4 !important; }
+        .token.operator { color: #d4d4d4 !important; }
+        .token.class-name { color: #4dc9b0 !important; }
+
+        .loader-container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .loader {
+            display: none;
+            width: 48px;
+            height: 48px;
+            border: 3px solid #FFF;
+            border-radius: 50%;
+            position: relative;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        .loader::after {
+            content: '';
+            box-sizing: border-box;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: 3px solid;
+            border-color: #FF3D00 transparent;
+        }
+
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div style="display: flex; gap: 10px">
+        <div class="child" style="width: 65%">
+            <form style="margin-block-end: 0">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600;">C# Code Editor</label>
+                <div class="editor-container">
+                    <div class="line-numbers" id="line-numbers"></div>
+                    <pre id="highlighted-code"><code class="language-csharp" id="highlighted-content"></code></pre>
+                    <textarea autofocus id="code" name="code" spellcheck="false"></textarea>
+                </div>
+            </form>
+            <button id="run">Run</button>
+        </div>
+        <!--Console-->
+        <div class="consoles" style="min-width: 40%">
+            <div class="child console" style="margin-bottom: 10px">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h3 style="margin: 0; font-weight: 600;">Output</h3>
+                    <button id="clear-output-console" style="background: none; border: none; color: #569cd6; cursor: pointer; padding: 4px 8px;">Clear</button>
+                </div>
+                <div class="log-content" id="log-output">
+<!--                    <div class="loader-container">-->
+<!--                        <span class="loader" id="spinner"></span>-->
+<!--                    </div>-->
+                </div>
+            </div>
+            <div class="child console" style="width: 100%; min-width: 100%">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <h3 style="margin: 0; font-weight: 600;">System</h3>
+                    <button id="clear-system-console" style="background: none; border: none; color: #569cd6; cursor: pointer; padding: 4px 8px;">Clear</button>
+                </div>
+                <div class="log-content" id="log-system"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="module" src="wasmRunner.js"></script>
+<script type="text/javascript" src="logger.js"></script>
+<script type="module">
+    import { run, preload } from './wasmRunner.js';
+    
+    const codeTextarea = document.getElementById('code');
+    const highlightedContent = document.getElementById('highlighted-content');
+    const lineNumbers = document.getElementById('line-numbers');
+    const highlightedCode = document.getElementById('highlighted-code');
+
+    // Initial code
+    const initialCode = `using System;
+        
+namespace CSharpPlayground
+{
+    public class Program
+    {
+        public void Main(string[] args)
+        {
+            Console.WriteLine("Hello, WebAssembly!");
+        }
+    }
+}`;
+
+    // Set initial code
+    codeTextarea.value = initialCode;
+    updateHighlightedCode();
+
+    // Update the highlighted code when typing
+    codeTextarea.addEventListener('input', updateHighlightedCode);
+    codeTextarea.addEventListener('scroll', syncScroll);
+
+    // Clear console buttons
+    document.getElementById('clear-output-console').addEventListener('click', () => {
+        document.getElementById('log-output').innerHTML = '';
+    });
+    document.getElementById('clear-system-console').addEventListener('click', () => {
+        document.getElementById('log-system').innerHTML = '';
+    });
+
+    // Update line numbers
+    function updateLineNumbers() {
+        const lines = codeTextarea.value.split('\n');
+        lineNumbers.innerHTML = '';
+        for (let i = 0; i < lines.length; i++) {
+            lineNumbers.innerHTML += `<div>${i + 1}</div>`;
+        }
+    }
+
+    // Update syntax highlighting using Prism
+    function updateHighlightedCode() {
+        highlightedContent.textContent = codeTextarea.value;
+        Prism.highlightElement(highlightedContent);
+        updateLineNumbers();
+    }
+
+    // Sync scrolling between textarea and highlighted overlay
+    function syncScroll() {
+        highlightedCode.scrollTop = codeTextarea.scrollTop;
+        highlightedCode.scrollLeft = codeTextarea.scrollLeft;
+        lineNumbers.scrollTop = codeTextarea.scrollTop;
+    }
+
+    await preload();
+    
+    document.getElementById("run").onclick = async () => {
+        document.getElementById("log-output").innerHTML = '';
+        document.getElementById("log-system").innerHTML = '';
+
+        await run(codeTextarea.value);
+    };
+</script>
+</body>
+</html>
