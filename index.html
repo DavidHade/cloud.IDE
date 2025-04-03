@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en-IE">
 <head>
     <title>C# Cloud IDE</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
@@ -13,10 +13,7 @@
             --primary: #6366f1;
             --primary-hover: #4f46e5;
             --dark-bg: #0f0f0f;
-            /*--dark-bg: #1e1e1e;*/
-            /*--editor-bg: #1c1c1c;*/
             --editor-bg: #262626;
-            /*--editor-border: #3b3b3b;*/
             --editor-border: #333333;
             --sidebar-bg: #252736;
             --card-bg: #2e2f42;
@@ -60,6 +57,9 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
             padding: 10px 0 0 0;
             border: 1px solid var(--editor-border);
+            overflow: hidden;
+            scrollbar-color: var(--editor-border) var(--editor-bg);
+            scrollbar-width: thin;
         }
         
         .console{
@@ -149,7 +149,7 @@
         /* Button Styles */
         #run {
             background-color: var(--success);
-            color: #d4d4d4;
+            color: var(--editor-bg);
             border: 1px solid var(--success);
             padding: 10px 24px;
             text-align: center;
@@ -225,7 +225,7 @@
             height: 56px;
             border-radius: 50%;
             border: 3px solid;
-            border-color: #FF3D00 transparent;
+            border-color: var(--error) transparent;
         }
 
         @keyframes rotation {
@@ -265,12 +265,21 @@
     <div style="display: flex; gap: 10px">
         <div class="child" style="width: 65%">
             <form style="margin-block-end: 0">
-                <h3 style="padding-bottom: 8px; font-weight: 600;">
-                    <svg aria-hidden="true" style="height: 16px" focusable="false" data-prefix="far" data-icon="code" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-                        <path fill="var(--success)" d="M399.1 1.1c-12.7-3.9-26.1 3.1-30 15.8l-144 464c-3.9 12.7 3.1 26.1 15.8 30s26.1-3.1 30-15.8l144-464c3.9-12.7-3.1-26.1-15.8-30zm71.4 118.5c-9.1 9.7-8.6 24.9 1.1 33.9L580.9 256 471.6 358.5c-9.7 9.1-10.2 24.3-1.1 33.9s24.3 10.2 33.9 1.1l128-120c4.8-4.5 7.6-10.9 7.6-17.5s-2.7-13-7.6-17.5l-128-120c-9.7-9.1-24.9-8.6-33.9 1.1zm-301 0c-9.1-9.7-24.3-10.2-33.9-1.1l-128 120C2.7 243 0 249.4 0 256s2.7 13 7.6 17.5l128 120c9.7 9.1 24.9 8.6 33.9-1.1s8.6-24.9-1.1-33.9L59.1 256 168.4 153.5c9.7-9.1 10.2-24.3 1.1-33.9z"></path>
-                    </svg>
-                    Code
-                </h3>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="padding-bottom: 8px; font-weight: 600;">
+                        <svg aria-hidden="true" style="height: 16px" focusable="false" data-prefix="far" data-icon="code" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                            <path fill="var(--success)" d="M399.1 1.1c-12.7-3.9-26.1 3.1-30 15.8l-144 464c-3.9 12.7 3.1 26.1 15.8 30s26.1-3.1 30-15.8l144-464c3.9-12.7-3.1-26.1-15.8-30zm71.4 118.5c-9.1 9.7-8.6 24.9 1.1 33.9L580.9 256 471.6 358.5c-9.7 9.1-10.2 24.3-1.1 33.9s24.3 10.2 33.9 1.1l128-120c4.8-4.5 7.6-10.9 7.6-17.5s-2.7-13-7.6-17.5l-128-120c-9.7-9.1-24.9-8.6-33.9 1.1zm-301 0c-9.1-9.7-24.3-10.2-33.9-1.1l-128 120C2.7 243 0 249.4 0 256s2.7 13 7.6 17.5l128 120c9.7 9.1 24.9 8.6 33.9-1.1s8.6-24.9-1.1-33.9L59.1 256 168.4 153.5c9.7-9.1 10.2-24.3 1.1-33.9z"></path>
+                        </svg>
+                        Code
+                    </h3>
+                    <button id="clear-code-editor" class="button-clear">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 6h18"></path>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        Clear
+                    </button>
+                </div>
                 <div class="editor-container">
                     <div class="line-numbers" id="line-numbers"></div>
                     <pre id="highlighted-code"><code class="language-csharp" id="highlighted-content"></code></pre>
@@ -357,27 +366,40 @@
     const highlightedCode = document.getElementById('highlighted-code');
     const runButton = document.getElementById('run');
     const statusItem = document.querySelector('.status-item span');
+    const statusBar = document.querySelector('.status-bar');
 
     // Initial code
-    const initialCode = `using System;
-        
-namespace CSharpPlayground
+    const initialCode = `namespace cloudIDE;
+
+public class Program
 {
-    public class Program
-    {
-        public void Main(string[] args)
-        {
-            Console.WriteLine("Hello, WebAssembly!");
-        }
-    }
+	public void Main(string[] args)
+	{
+		Console.WriteLine("Hello, WebAssembly!");
+
+		for (int i = 5; i < 10; i++)
+			Console.WriteLine(Fibonacci(i));
+	}
+
+	public static int Fibonacci(int n)
+	{
+		if (n == 0) return 0;
+		if (n == 1) return 1;
+		return Fibonacci(n - 1) + Fibonacci(n - 2);
+	}
 }`;
 
+    const storedValue = localStorage.getItem("cloudIDE");
+    
     // Set initial code
-    codeTextarea.value = initialCode;
+    codeTextarea.value = storedValue == null ? initialCode : storedValue;
     updateHighlightedCode();
-
+    
     // Update the highlighted code when typing
-    codeTextarea.addEventListener('input', updateHighlightedCode);
+    codeTextarea.addEventListener('input', () => {
+        updateHighlightedCode();
+        localStorage.setItem("cloudIDE", codeTextarea.value);
+    });
     codeTextarea.addEventListener('scroll', syncScroll);
 
     // Clear console buttons
@@ -386,6 +408,11 @@ namespace CSharpPlayground
     });
     document.getElementById('clear-system-console').addEventListener('click', () => {
         document.getElementById('log-system').innerHTML = '';
+    });
+    document.getElementById('clear-code-editor').addEventListener('click', (e) => {
+        e.preventDefault();
+        codeTextarea.value = initialCode;
+        updateHighlightedCode();
     });
 
     // Keyboard shortcut for running code
@@ -443,12 +470,17 @@ namespace CSharpPlayground
         try {
             await run(codeTextarea.value);
             statusItem.textContent = 'Execution completed';
+            statusBar.style.color = 'var(--success)';
         } catch (error) {
             statusItem.textContent = 'Error';
-            console.error(error);
+            statusBar.style.color = 'var(--error)';
+            const output = document.getElementById('log-output');
+            const text = (JSON && JSON.stringify ? JSON.stringify(error) : error) + '<br />'
+            output.innerHTML += "> " + text;
         } finally {
             setTimeout(() => {
                 statusItem.textContent = 'Ready';
+                statusBar.style.color = 'var(--text-secondary)';
             }, 2000);
         }
     };

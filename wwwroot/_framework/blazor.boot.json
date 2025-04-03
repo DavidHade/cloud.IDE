@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "WASM",
   "resources": {
-    "hash": "sha256-Km986IJGk5o53vDx8yFIld61jw1XaDeppjNacsa/XPw=",
+    "hash": "sha256-UcwzgntLKi17oSkSMh/TuA0ugmB4mn0Zr16o6+lTWfs=",
     "jsModuleNative": {
       "dotnet.native.8.0.14.ao03vwswak.js": "sha256-DTUQS6Jc6BNnS7sYYezFfaUKVmQq0/lanhQuJfygH/k="
     },
@@ -61,7 +61,7 @@
       "System.Xml.ReaderWriter.dll": "sha256-m8WoxuPuLju5w/YKz+rT1+PLJ52zk253gTHvrhw4gP4=",
       "System.Xml.XDocument.dll": "sha256-hO1Ftd+SXBc+6kBPocfWDRj6GIw97TssqjT8JiFtPGQ=",
       "System.Xml.XPath.XDocument.dll": "sha256-AW9MbPhJcQzZou8ahMb2uUQGgaoYsdmjpxmgSUikmso=",
-      "WASM.dll": "sha256-MBk3wuRjMv/KcVpOIm730ygy5iD9iOIjoc1jIKQOL7o="
+      "WASM.dll": "sha256-esETyK4Y3LC4yJFLXnwLZpsj2BZmgX5t4rFRwl7/c/A="
     },
     "satelliteResources": {
       "cs": {
