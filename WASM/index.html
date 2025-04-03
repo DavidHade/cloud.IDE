@@ -3,222 +3,13 @@
 <head>
     <title>C# Cloud IDE</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
+    <script type="module" src="js/wasmRunner.js"></script>
+    <script type="module" src="js/app.js"></script>
     <!-- Using Prism.js for reliable syntax highlighting -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-okaidia.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/line-numbers/prism-line-numbers.min.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --dark-bg: #0f0f0f;
-            --editor-bg: #262626;
-            --editor-border: #333333;
-            --sidebar-bg: #252736;
-            --card-bg: #2e2f42;
-            --text-primary: #f8fafc;
-            --text-secondary: #94a3b8;
-            --border-color: #3f4257;
-            --accent: #2196f3;
-            --success: #10b981;
-            --error: #ef4444;
-            --warning: #f59e0b;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--dark-bg);
-            margin: 0 auto;
-            padding: 20px 20px 20px 20px;
-            color: #d4d4d4;
-        }
-
-        .container {
-            display: flex;
-            flex-direction: column;
-            max-width: 95vw;
-            margin: 0 auto;
-            gap: 20px;
-        }
-        
-        h3{
-            padding-left: 15px;
-        }
-        
-        .child {
-            background-color: var(--editor-border);
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
-            padding: 10px 0 0 0;
-            border: 1px solid var(--editor-border);
-            overflow: hidden;
-            scrollbar-color: var(--editor-border) var(--editor-bg);
-            scrollbar-width: thin;
-        }
-        
-        .console{
-            min-width: 100%;
-            min-height: 200px;
-            height: calc(44.5vh - 5px);
-        }
-        
-        .editor-container {
-            position: relative;
-            height: 72vh;
-            overflow: hidden;
-        }
-
-        .editor-container::selection {
-            background: #245b82;
-        }
-
-        /* Textarea that's actually editable */
-        #code {
-            width: 100%;
-            height: 100%;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 14px;
-            background-color: var(--editor-bg);
-            color: var(--editor-bg);
-            caret-color: #d4d4d4;
-            resize: none;
-            tab-size: 4;
-            line-height: 1.5;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 1;
-            margin: 0;
-            padding: 10px 15px 10px 45px;
-            border: none;
-            outline: none;
-            white-space: pre;
-        }
-
-        /* Syntax highlighted overlay */
-        #highlighted-code {
-            width: 100%;
-            height: 100%;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 14px;
-            background-color: transparent;
-            color: transparent;
-            resize: none;
-            tab-size: 4;
-            line-height: 1.5;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 2;
-            margin: 0;
-            padding: 10px 15px 10px 45px;
-            pointer-events: none;
-            white-space: pre;
-            overflow: hidden;
-        }
-
-        /* Console Styles */
-        .log-content {
-            height: calc(36vh);
-            background-color: var(--editor-bg);
-            color: #d4d4d4;
-            padding: 15px;
-            border-radius: 4px;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 0.9em;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            border: 1px solid var(--editor-border);
-        }
-        
-        .button-clear{
-            background: none; 
-            border: none; 
-            color: var(--accent); 
-            cursor: pointer; 
-            padding: 4px 8px;
-        }
-
-        /* Button Styles */
-        #run {
-            background-color: var(--accent);
-            color: #fafafa;
-            border: 1px solid var(--accent);
-            padding: 10px 24px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            margin-top: 10px;
-            margin-left: 15px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        #run:hover {
-            border: 1px solid black;
-        }
-
-        /* Line numbers */
-        .line-numbers {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            height: calc(100% - 20px);
-            overflow: hidden;
-            z-index: 5;
-            padding-right: 10px;
-            text-align: right;
-            color: #858585;
-            font-family: 'Consolas', 'Courier New', monospace;
-            font-size: 14px;
-            line-height: 1.5;
-            user-select: none;
-        }
-
-        /* Visual Studio-like syntax highlighting */
-        .token.keyword { color: #569cd6 !important; }
-        .token.type { color: #4ec9b0 !important; }
-        .token.string { color: #ce9178 !important; }
-        .token.comment { color: #57a64a !important; }
-        .token.number { color: #b5cea8 !important; }
-        .token.punctuation { color: #d4d4d4 !important; }
-        .token.method { color: #dbdb93 !important; }
-        .token.namespace { color: #d4d4d4 !important; }
-        .token.operator { color: #d4d4d4 !important; }
-        .token.class-name { color: #44c8af !important; }
-
-        .status-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--editor-border);
-            padding: 8px 20px;
-            display: flex;
-            justify-content: space-between;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            border-top: 1px solid var(--border-color);
-            z-index: 10;
-        }
-
-        .status-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-    </style>
+    <link href="css/modal.css" rel="stylesheet" />
+    <link href="css/app.css" rel="stylesheet" />
 </head>
 <body>
 
@@ -233,13 +24,21 @@
                         </svg>
                         Code
                     </h3>
-                    <button id="clear-code-editor" class="button-clear">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M3 6h18"></path>
-                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                        </svg>
-                        Clear
-                    </button>
+                    <div style="margin-top: -10px">
+                        <button id="share" class="button-clear">
+                            <svg height="14px" viewBox="0 0 16 16" width="14px" xmlns="http://www.w3.org/2000/svg"><g fill="none" fill-rule="evenodd" id="Icons with numbers" stroke="none" stroke-width="2"><g fill="var(--accent)" transform="translate(0.000000, -384.000000)">
+                                <path d="M0,388 L6.75,388 L4.25,390 L2,390 L2,397 L12,397 L12,395 L14,393.4 L14,399 L0,399 Z M16,390 L11,394 L11,392.008289 C7.66738867,391.888001 5.66106768,393.37291 3.96685791,395.023071 C3.96685791,391.100747 7.46045937,388.011342 11,387.976794 L11,386 Z M16,390"/></g></g>
+                            </svg>
+                            Share
+                        </button>
+                        <button id="clear-code-editor" class="button-clear">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 6h18"></path>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Clear
+                        </button>
+                    </div>
                 </div>
                 <div class="editor-container">
                     <div class="line-numbers" id="line-numbers"></div>
@@ -247,7 +46,7 @@
                     <textarea autofocus id="code" name="code" spellcheck="false"></textarea>
                 </div>
             </form>
-            <button id="run">
+            <button id="run" class="run">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
@@ -311,168 +110,40 @@
         <span>C#</span>
     </div>
 </div>
+<!-- Modal -->
+<div id="share-code-modal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 class="modal-title">Share this code</h2>
+            <span class="close">&times;</span>
+        </div>
+        <div class="input-group">
+            <input type="text" id="copyInput" value="">
+            <button id="copyButton">
+                <svg viewBox="0 0 24 24">
+                    <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                </svg>
+                Copy
+            </button>
+        </div>
+    </div>
+</div>
 
-<script type="module" src="wasmRunner.js"></script>
-<script type="text/javascript" src="logger.js"></script>
+<!-- Toast notifications -->
+<div class="toast" id="toast-copy">Copied to clipboard!</div>
+<div class="toast" id="toast-save">Autosave is on, no need to save manually</div>
 <script type="module">
-    import { run, preload } from './wasmRunner.js';
+    import { preload } from './js/wasmRunner.js';
+    import { handleSavedState } from './js/app.js';
     
-    const codeTextarea = document.getElementById('code');
-    const highlightedContent = document.getElementById('highlighted-content');
-    const lineNumbers = document.getElementById('line-numbers');
-    const highlightedCode = document.getElementById('highlighted-code');
-    const runButton = document.getElementById('run');
-    const statusItem = document.querySelector('.status-item span');
-    const statusBar = document.querySelector('.status-bar');
-
-    // Initial code
-    const initialCode = `using System;
-
-namespace cloudIDE;
-
-public class Program
-{
-	public void Main(string[] args)
-	{
-		Console.WriteLine("Hello, WebAssembly!");
-
-		for (int i = 5; i < 10; i++)
-			Console.WriteLine(Fibonacci(i));
-	}
-
-	public static int Fibonacci(int n)
-	{
-		if (n == 0) return 0;
-		if (n == 1) return 1;
-		return Fibonacci(n - 1) + Fibonacci(n - 2);
-	}
-}`;
-
-    const storedValue = localStorage.getItem("cloudIDE");
-    
-    // Set initial code
-    codeTextarea.value = storedValue == null ? initialCode : storedValue;
-    updateHighlightedCode();
-    
-    // Update the highlighted code when typing
-    codeTextarea.addEventListener('input', () => {
-        updateHighlightedCode();
-        localStorage.setItem("cloudIDE", codeTextarea.value);
-    });
-    codeTextarea.addEventListener('scroll', syncScroll);
-
-    // Clear console buttons
-    document.getElementById('clear-output-console').addEventListener('click', () => {
-        document.getElementById('log-output').innerHTML = '';
-    });
-    document.getElementById('clear-system-console').addEventListener('click', () => {
-        document.getElementById('log-system').innerHTML = '';
-    });
-    document.getElementById('clear-code-editor').addEventListener('click', (e) => {
-        e.preventDefault();
-        codeTextarea.value = initialCode;
-        updateHighlightedCode();
-    });
-
-    // Keyboard shortcut for running code
-    document.addEventListener('keydown', (e) => {
-        if (e.ctrlKey && e.shiftKey && e.key === 'B') {
-            e.preventDefault();
-            runButton.click();
-        }
-    });
-
-    // Prevent tab from jumping focus out of editor
-    codeTextarea.addEventListener('keydown', function(e) {
-        if (e.key === 'Tab') {
-            e.preventDefault();
-            let start = this.selectionStart;
-            let end = this.selectionEnd;
-
-            // set textarea value to: text before caret + tab + text after caret
-            this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
-
-            // put caret at right position again
-            this.selectionStart = this.selectionEnd = start + 1;
-        }
-        else if(e.key === 'Enter'){
-            let cursorPos = this.selectionStart;
-            let currentLine = this.value.substring(0, this.selectionStart).split("\n").pop();
-            let indent = currentLine.match(/^\s*/)[0];
-            let value = this.value;
-            let textBefore = value.substring(0,  cursorPos );
-            let textAfter  = value.substring( cursorPos, value.length );
-
-            e.preventDefault();
-            this.value = textBefore + "\n" + indent + textAfter;
-            setCaretPosition(this, cursorPos + indent.length + 1); // +1 is for the \n
-            updateHighlightedCode();
-        }
-    });
-
-    function setCaretPosition(ctrl, pos)
-    {
-
-        if(ctrl.setSelectionRange)
-        {
-            ctrl.focus();
-            ctrl.setSelectionRange(pos,pos);
-        }
-        else if (ctrl.createTextRange) {
-            let range = ctrl.createTextRange();
-            range.collapse(true);
-            range.moveEnd('character', pos);
-            range.moveStart('character', pos);
-            range.select();
-        }
-    }
-
-    // Update line numbers
-    function updateLineNumbers() {
-        const lines = codeTextarea.value.split('\n');
-        lineNumbers.innerHTML = '';
-        for (let i = 0; i < lines.length; i++) {
-            lineNumbers.innerHTML += `<div>${i + 1}</div>`;
-        }
-    }
-
-    // Update syntax highlighting using Prism
-    function updateHighlightedCode() {
-        highlightedContent.textContent = codeTextarea.value;
-        Prism.highlightElement(highlightedContent);
-        updateLineNumbers();
-    }
-
-    // Sync scrolling between textarea and highlighted overlay
-    function syncScroll() {
-        highlightedCode.scrollTop = codeTextarea.scrollTop;
-        highlightedCode.scrollLeft = codeTextarea.scrollLeft;
-        lineNumbers.scrollTop = codeTextarea.scrollTop;
-    }
-
+    //Runnable at page load
+    handleSavedState();
     await preload();
-    
-    document.getElementById("run").onclick = async () => {
-        document.getElementById("log-output").innerHTML = '';
-        document.getElementById("log-system").innerHTML = '';
-        
-        try {
-            await run(codeTextarea.value);
-            statusItem.textContent = 'Execution completed';
-            statusBar.style.color = 'var(--success)';
-        } catch (error) {
-            statusItem.textContent = 'Error';
-            statusBar.style.color = 'var(--error)';
-            const output = document.getElementById('log-output');
-            const text = (JSON && JSON.stringify ? JSON.stringify(error) : error) + '<br />'
-            output.innerHTML += "> " + text;
-        } finally {
-            setTimeout(() => {
-                statusItem.textContent = 'Ready';
-                statusBar.style.color = 'var(--text-secondary)';
-            }, 2000);
-        }
-    };
 </script>
+<script type="text/javascript" src="js/logger.js"></script>
+<script type="text/javascript" src="js/modal.js"></script>
+<script type="text/javascript" src="js/encoding.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-csharp.min.js"></script>
 </body>
 </html>

@@ -18,8 +18,13 @@
     <ItemGroup>
         <Content Include="index.html" CopyToOutputDirectory="Always" />
         <Content Include="favicon.ico" CopyToOutputDirectory="Always" />
-        <Content Include="wasmRunner.js" CopyToOutputDirectory="Always" />
-        <Content Include="logger.js" CopyToOutputDirectory="Always" />
+        <Content Include="css\modal.css" CopyToOutputDirectory="Always" />
+        <Content Include="css\app.css" CopyToOutputDirectory="Always" />
+        <Content Include="js\app.js" CopyToOutputDirectory="Always" />
+        <Content Include="js\encoding.js" CopyToOutputDirectory="Always" />
+        <Content Include="js\logger.js" CopyToOutputDirectory="Always" />
+        <Content Include="js\modal.js" CopyToOutputDirectory="Always" />
+        <Content Include="js\wasmRunner.js" CopyToOutputDirectory="Always" />
     </ItemGroup>
     
 </Project> 
