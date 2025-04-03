@@ -20,8 +20,7 @@
             --text-primary: #f8fafc;
             --text-secondary: #94a3b8;
             --border-color: #3f4257;
-            /*--accent: #ef4444;*/
-            --accent: #2979ff;
+            --accent: #2196f3;
             --success: #10b981;
             --error: #ef4444;
             --warning: #f59e0b;
@@ -69,8 +68,7 @@
             min-height: 200px;
             height: calc(44.5vh - 5px);
         }
-
-        /* Editor Container */
+        
         .editor-container {
             position: relative;
             height: 72vh;
@@ -88,7 +86,7 @@
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 14px;
             background-color: var(--editor-bg);
-            color: #d4d4d4;
+            color: var(--editor-bg);
             caret-color: #d4d4d4;
             resize: none;
             tab-size: 4;
@@ -200,45 +198,6 @@
         .token.operator { color: #d4d4d4 !important; }
         .token.class-name { color: #44c8af !important; }
 
-        .loader-container{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .loader {
-            display: none;
-            width: 48px;
-            height: 48px;
-            border: 3px solid #FFF;
-            border-radius: 50%;
-            position: relative;
-            box-sizing: border-box;
-            animation: rotation 1s linear infinite;
-        }
-        .loader::after {
-            content: '';
-            box-sizing: border-box;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            width: 56px;
-            height: 56px;
-            border-radius: 50%;
-            border: 3px solid;
-            border-color: var(--error) transparent;
-        }
-
-        @keyframes rotation {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
         .status-bar {
             position: fixed;
             bottom: 0;
@@ -313,11 +272,7 @@
                         Clear
                     </button>
                 </div>
-                <div class="log-content" id="log-output">
-<!--                    <div class="loader-container">-->
-<!--                        <span class="loader" id="spinner"></span>-->
-<!--                    </div>-->
-                </div>
+                <div class="log-content" id="log-output"></div>
             </div>
             <div class="child console" style="width: 100%; min-width: 100%">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -440,7 +395,37 @@ public class Program
             // put caret at right position again
             this.selectionStart = this.selectionEnd = start + 1;
         }
+        else if(e.key === 'Enter'){
+            let cursorPos = this.selectionStart;
+            let currentLine = this.value.substring(0, this.selectionStart).split("\n").pop();
+            let indent = currentLine.match(/^\s*/)[0];
+            let value = this.value;
+            let textBefore = value.substring(0,  cursorPos );
+            let textAfter  = value.substring( cursorPos, value.length );
+
+            e.preventDefault();
+            this.value = textBefore + "\n" + indent + textAfter;
+            setCaretPosition(this, cursorPos + indent.length + 1); // +1 is for the \n
+            updateHighlightedCode();
+        }
     });
+
+    function setCaretPosition(ctrl, pos)
+    {
+
+        if(ctrl.setSelectionRange)
+        {
+            ctrl.focus();
+            ctrl.setSelectionRange(pos,pos);
+        }
+        else if (ctrl.createTextRange) {
+            let range = ctrl.createTextRange();
+            range.collapse(true);
+            range.moveEnd('character', pos);
+            range.moveStart('character', pos);
+            range.select();
+        }
+    }
 
     // Update line numbers
     function updateLineNumbers() {
