@@ -8,7 +8,7 @@ namespace WASM;
 
 public static partial class AssemblyLoader
 {
-    private const string Namespace = "CSharpPlayground";
+    private const string Namespace = "cloudIDE";
     public const string NameSpace = $"namespace {Namespace}";
     private static readonly HttpClient Client = new()
     {

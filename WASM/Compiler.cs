@@ -21,7 +21,6 @@ public static partial class Compiler
         {
             Console.WriteLine($"dbg: ERROR: {e.Message}");
         }
-        
     }
 
     [JSExport]

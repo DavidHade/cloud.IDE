@@ -1,27 +1,26 @@
 (function () {
-    var old = console.log;
-    var output = document.getElementById('log-output');
-    var system = document.getElementById('log-system');
-    //const timestamp = `[${new Date().toLocaleTimeString()}] `;
-    const timestamp = "> ";
+    const old = console.log;
+    const output = document.getElementById('log-output');
+    const system = document.getElementById('log-system');
+    const arrow = "> ";
     console.log = function (message) {
         if (typeof message == 'object') {
             const text = (JSON && JSON.stringify ? JSON.stringify(message) : message) + '<br />'
             
             if(text.startsWith('dbg:')){
-                system.innerHTML += timestamp + text.substring(5, text.length);
+                system.innerHTML += arrow + text.substring(5, text.length);
             }else{
-                output.innerHTML += timestamp + text;
+                output.innerHTML += arrow + text;
             }
         } else {
             if (message.toString().startsWith('dbg:')){
-                system.innerHTML += timestamp + message.substring(5, message.length) + '<br />';
+                system.innerHTML += arrow + message.substring(5, message.length) + '<br />';
             }else{
                 if (message.startsWith('err: ')){
-                    const inner = timestamp + message.substring(5, message.length) + '<br />';
-                    output.innerHTML += `<span style="color: red">${inner}</span>`;
+                    const inner = arrow + message.substring(5, message.length) + '<br />';
+                    output.innerHTML += `<span style="color: var(--error)">${inner}</span>`;
                 }else{
-                    const inner = timestamp + message + '<br />';
+                    const inner = arrow + message + '<br />';
                     output.innerHTML += inner;
                 }  
             }
