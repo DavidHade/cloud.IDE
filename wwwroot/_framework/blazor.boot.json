@@ -1,12 +1,12 @@
 {
   "mainAssemblyName": "WASM",
   "resources": {
-    "hash": "sha256-5oApIL7PkAmiCt0s4HNPIyWGRmqBtxHpt5rYbe8y5OI=",
+    "hash": "sha256-ui8Xetb5lRYvfmw0veb+Oyx+KMlkPXqs9Bi9YLCPjI0=",
     "jsModuleNative": {
-      "dotnet.native.8.0.14.ao03vwswak.js": "sha256-DTUQS6Jc6BNnS7sYYezFfaUKVmQq0/lanhQuJfygH/k="
+      "dotnet.native.8.0.14.eyly92us96.js": "sha256-DTUQS6Jc6BNnS7sYYezFfaUKVmQq0/lanhQuJfygH/k="
     },
     "jsModuleRuntime": {
-      "dotnet.runtime.8.0.14.jykzz9d9mo.js": "sha256-44Vu7OSX4JP89eoc3oTYbYfC5C7USoIWuCw1W9IG6N4="
+      "dotnet.runtime.8.0.14.plmp3byf4y.js": "sha256-44Vu7OSX4JP89eoc3oTYbYfC5C7USoIWuCw1W9IG6N4="
     },
     "wasmNative": {
       "dotnet.native.wasm": "sha256-mICh/Z0HwmHNDnkBnBbRTyDkRYBu3OBkhmuy2F7aUSU="
@@ -61,7 +61,7 @@
       "System.Xml.ReaderWriter.dll": "sha256-m8WoxuPuLju5w/YKz+rT1+PLJ52zk253gTHvrhw4gP4=",
       "System.Xml.XDocument.dll": "sha256-hO1Ftd+SXBc+6kBPocfWDRj6GIw97TssqjT8JiFtPGQ=",
       "System.Xml.XPath.XDocument.dll": "sha256-AW9MbPhJcQzZou8ahMb2uUQGgaoYsdmjpxmgSUikmso=",
-      "WASM.dll": "sha256-7Ypo6UffTHkbi22aeAydR3QcMDP7V+zAUgQKt8t0tkg="
+      "WASM.dll": "sha256-EUvCTNJGwQKRuN7daxAwb0dsEj5QCitR8z6Q3BzabkI="
     },
     "satelliteResources": {
       "cs": {
