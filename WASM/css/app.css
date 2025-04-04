@@ -10,7 +10,7 @@
     --text-secondary: #94a3b8;
     --border-color: #3f4257;
     --accent: #2196f3;
-    --accent-hover: #2979ff;
+    --accent-hover: #64b5f6;
     --success: #10b981;
     --error: #ef4444;
     --warning: #f59e0b;
@@ -145,22 +145,24 @@ h3{
     margin-left: 15px;
     cursor: pointer;
     border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 .run:hover {
-    border: 1px solid black;
+    background-color: var(--accent-hover);
 }
 
 .button-clear{
     background: none;
-    border: none;
     color: var(--accent);
     cursor: pointer;
+    border: none;
     padding: 4px 8px;
+    transition: color 0.3s;
 }
 
 .button-clear:hover{
-    font-weight: 600;
+    color: var(--accent-hover);
 }
 
 /* Line numbers */
@@ -186,11 +188,13 @@ h3{
 .token.string { color: #ce9178 !important; }
 .token.comment { color: #57a64a !important; }
 .token.number { color: #b5cea8 !important; }
-.token.punctuation { color: #d4d4d4 !important; }
+.token.punctuation { color: white !important; }
 .token.method { color: #dbdb93 !important; }
-.token.namespace { color: #d4d4d4 !important; }
-.token.operator { color: #d4d4d4 !important; }
+.token.namespace { color: white !important; opacity: 1 }
+.token.operator { color: white !important; }
 .token.class-name { color: #44c8af !important; }
+.token.variable { color: #9bdafc !important; }
+.token.preprocessor { color: #569cd6 !important; }
 
 .status-bar {
     position: fixed;

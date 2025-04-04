@@ -25,6 +25,7 @@
         <Content Include="js\logger.js" CopyToOutputDirectory="Always" />
         <Content Include="js\modal.js" CopyToOutputDirectory="Always" />
         <Content Include="js\wasmRunner.js" CopyToOutputDirectory="Always" />
+        <Content Include="js\prism-csharp.min.js" CopyToOutputDirectory="Always" />
     </ItemGroup>
     
 </Project> 

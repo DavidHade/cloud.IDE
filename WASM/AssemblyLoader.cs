@@ -3,6 +3,9 @@ using System.Reflection;
 using System.Runtime.InteropServices.JavaScript;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+#pragma warning disable IL2026
+#pragma warning disable IL2072
+#pragma warning disable IL2075
 
 namespace WASM;
 
