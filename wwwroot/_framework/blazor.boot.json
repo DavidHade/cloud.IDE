@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "WASM",
   "resources": {
-    "hash": "sha256-orNptEH4ZhfNtliI7VgUWV0lGtHSTKENt8heq6GeEW0=",
+    "hash": "sha256-5oApIL7PkAmiCt0s4HNPIyWGRmqBtxHpt5rYbe8y5OI=",
     "jsModuleNative": {
       "dotnet.native.8.0.14.ao03vwswak.js": "sha256-DTUQS6Jc6BNnS7sYYezFfaUKVmQq0/lanhQuJfygH/k="
     },
@@ -37,7 +37,7 @@
       "System.Net.Http.dll": "sha256-y1hhcnCvV3t/NiSGDlb2HNIGtJpB1hdvbCDxyiA1W6k=",
       "System.Net.Primitives.dll": "sha256-sBDEOO4jrC3lARafMT2p5ftkRxQGlNKRYFzQGRUp6ww=",
       "System.ObjectModel.dll": "sha256-4S8UphFBtnmoDErX3W/lFgAt19LRsK15FkW4HCg1Lt8=",
-      "System.Private.CoreLib.dll": "sha256-LoCxCoFVFa96bfkuGokef4zyKsY3q3XV7f1HjoxcWHk=",
+      "System.Private.CoreLib.dll": "sha256-3QZXmY6ljbcG+JgYBWNqWXLUm2inMi5sXZkk4A7ahbI=",
       "System.Private.Uri.dll": "sha256-2TTj2j+GwBzR5ab9P03lmyxxQJRhvhVu9V8osrPpsuE=",
       "System.Private.Xml.dll": "sha256-XfGep4QW6QROVJqXX61sECHw2eWanfLWLG0ZWda0fAI=",
       "System.Private.Xml.Linq.dll": "sha256-lBXR4hiuhz4JEZEh2NChzquKUsXu8BRgG8uXJ/5HYKA=",
@@ -53,7 +53,7 @@
       "System.Security.Cryptography.dll": "sha256-FILnwFPLhKz1gzfpcbRLM6HT9nfHe7k/ptM36uqpfd4=",
       "System.Text.Encoding.CodePages.dll": "sha256-c2JKXWff7siVUzJZdekbrCKPN3wB0g9OsVELUVbaF5Q=",
       "System.Text.Encoding.Extensions.dll": "sha256-kfynLZ3eT9UtBLuIpjAeY6+MtCYltjh+Y0OfwwuMHgw=",
-      "System.Text.RegularExpressions.dll": "sha256-/VI+hRPgHZ/KCPYepvgNd/1FOO1lk660LtblxcOKZbo=",
+      "System.Text.RegularExpressions.dll": "sha256-4gTeWfyEHVCi4/Hc29COFMgqqduVdsmZY8xMIDmnVjQ=",
       "System.Threading.dll": "sha256-jwkhJ9aNpzxLgB0icrRcXKuwLlLwr5zenpBooFQVqJY=",
       "System.Threading.Tasks.Parallel.dll": "sha256-CN0irCEFBbvLBxAN+DscurQ5EpA5Q3iac3/8u70POuc=",
       "System.Threading.ThreadPool.dll": "sha256-pa5UNQDu6PkI5x6PoBP1+T/XFDT6QQUhEVEKGhN1JaU=",
@@ -61,7 +61,7 @@
       "System.Xml.ReaderWriter.dll": "sha256-m8WoxuPuLju5w/YKz+rT1+PLJ52zk253gTHvrhw4gP4=",
       "System.Xml.XDocument.dll": "sha256-hO1Ftd+SXBc+6kBPocfWDRj6GIw97TssqjT8JiFtPGQ=",
       "System.Xml.XPath.XDocument.dll": "sha256-AW9MbPhJcQzZou8ahMb2uUQGgaoYsdmjpxmgSUikmso=",
-      "WASM.dll": "sha256-gsE3+IFhJDNvGCQ6RxngEpx3ZmBlXxDcnN1urvAqGDA="
+      "WASM.dll": "sha256-7Ypo6UffTHkbi22aeAydR3QcMDP7V+zAUgQKt8t0tkg="
     },
     "satelliteResources": {
       "cs": {
