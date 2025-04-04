@@ -47,7 +47,7 @@ h3{
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
     padding: 10px 0 0 0;
-    border: 1px solid var(--editor-border);
+    border: 1px solid var(--border-color);
     overflow: hidden;
     scrollbar-color: var(--editor-border) var(--editor-bg);
     scrollbar-width: thin;
@@ -128,14 +128,6 @@ h3{
     border: 1px solid var(--editor-border);
 }
 
-.button-clear{
-    background: none;
-    border: none;
-    color: var(--accent);
-    cursor: pointer;
-    padding: 4px 8px;
-}
-
 /* Button Styles */
 .run {
     background-color: var(--accent);
@@ -157,6 +149,18 @@ h3{
 
 .run:hover {
     border: 1px solid black;
+}
+
+.button-clear{
+    background: none;
+    border: none;
+    color: var(--accent);
+    cursor: pointer;
+    padding: 4px 8px;
+}
+
+.button-clear:hover{
+    font-weight: 600;
 }
 
 /* Line numbers */

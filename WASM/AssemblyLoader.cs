@@ -16,37 +16,54 @@ public static partial class AssemblyLoader
     };
 
     private static List<MetadataReference> _cachedReferences = [];
+    private static HashSet<string> _cachedAssemblies = [];
     
     [JSImport("getBaseUrl", "CSharpMethodsJSImplementationsModule")]
     private static partial string GetBaseUrl();
 
-    public static async Task<List<MetadataReference>> GetReferenceAssemblies()
+    public static async Task<List<MetadataReference>> PreloadReferenceAssemblies()
     {
         if (_cachedReferences.Any()) return _cachedReferences;
         
+        var references = new List<MetadataReference>();
         var appAssemblies = Assembly.GetExecutingAssembly()
             .GetReferencedAssemblies()
             .Select(Assembly.Load)
             .ToList();
         
         appAssemblies.Add(typeof(object).Assembly);
-        var references = new List<MetadataReference>();
         
         foreach (var assembly in appAssemblies)
         {
-            var metadataReference = await GetAssemblyMetadataReference(assembly);
-            if (metadataReference == null)
-            {
-                Console.WriteLine($"dbg: {assembly.GetName().Name} was null");
-                continue;
-            }
-
-            references.Add(metadataReference);
+            await GetReference(assembly.GetName().Name!, references);
         }
+        
+        //Needed for HttpClient
+        var privateUri = await GetAssemblyMetadataReference("System.Private.Uri");
 
+        if (privateUri is null)
+            throw new Exception("Could not find System.Private.Uri");
+        
+        references.Add(privateUri);
+        
         _cachedReferences = references;
         
         return references;
+    }
+
+    public static async Task<List<MetadataReference>> GetReferenceAssemblies(IEnumerable<string> additionalAssemblies)
+    {
+        var references = new List<MetadataReference>();
+        var requiredAssemblies = additionalAssemblies.Where(x => !_cachedAssemblies.Contains(x)).ToArray();
+        
+        foreach (var assembly in requiredAssemblies)
+        {
+            await GetReference(assembly, references);
+        }
+
+        _cachedAssemblies.Combine(requiredAssemblies);
+        _cachedReferences.AddRange(references);
+        return _cachedReferences;
     }
     
     public static void EmitAndRun(CSharpCompilation compilation)
@@ -93,11 +110,22 @@ public static partial class AssemblyLoader
         }
     }
     
-    private static async Task<MetadataReference?> GetAssemblyMetadataReference(Assembly assembly)
+    private static async Task GetReference(string assembly, List<MetadataReference> references)
+    {
+        var metadataReference = await GetAssemblyMetadataReference(assembly);
+        if (metadataReference == null)
+        {
+            Console.WriteLine($"dbg: {assembly} was null");
+            return;
+        }
+        
+        references.Add(metadataReference);
+    }
+    
+    private static async Task<MetadataReference?> GetAssemblyMetadataReference(string assembly)
     {
         var sw = Stopwatch.StartNew();
-        var assemblyName = assembly.GetName().Name;
-        var assemblyUrl = $"./wwwroot/_framework/{assemblyName}.dll";
+        var assemblyUrl = $"./wwwroot/_framework/{assembly}.dll";
         
         try
         {
@@ -105,14 +133,14 @@ public static partial class AssemblyLoader
             if (response.IsSuccessStatusCode)
             {
                 var bytes = await response.Content.ReadAsByteArrayAsync();
-                Console.WriteLine("dbg: Downloaded {0} in {1} ms", assemblyName, sw.ElapsedMilliseconds);
+                Console.WriteLine("dbg: Downloaded {0} in {1} ms", assembly, sw.ElapsedMilliseconds);
                 
                 return MetadataReference.CreateFromImage(bytes);
             }
         }
         catch (Exception e)
         {
-            Console.WriteLine("dbg: Failed downloading {0} - {1}", assemblyName, e.Message);
+            Console.WriteLine("dbg: Failed downloading {0} - {1}", assembly, e.Message);
         }
         
         return null;
