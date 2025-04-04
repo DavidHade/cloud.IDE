@@ -3,7 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0-browser</TargetFramework>
         <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
-        <WasmNativeStrip>true</WasmNativeStrip>
+        <WasmNativeStrip>false</WasmNativeStrip>
         <WasmEnableWebcil>false</WasmEnableWebcil>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
