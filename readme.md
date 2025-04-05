@@ -1,5 +1,5 @@
 # WASM based cloud IDE/REPL for C#
-![image](https://github.com/user-attachments/assets/4d95e5ae-33c6-4573-82f3-713c04a03330)
+![image](https://github.com/user-attachments/assets/861a9716-7511-4f20-868f-7f9100b15e8f)
 
 - Minimal, no frameworks
 - Computation runs 100% in the browser, thanks to WASM
