@@ -18,12 +18,7 @@ setModuleImports("CSharpMethodsJSImplementationsModule", {
 const config = getConfig();
 const exports = await getAssemblyExports(config.mainAssemblyName);
 
-// call Program.Main(string[] args) method from JavaScript
-// passing to it an array of arguments "arg1", "arg2" and "arg3"
-
-//await dotnetRuntime.runMain(config.mainAssemblyName, ["arg1", "arg2", "arg3"]);
-
-export async function run(src) {
+export async function compileAndRun(src) {
     await exports.WASM.Compiler.CompileAndRun(src);
 }
 

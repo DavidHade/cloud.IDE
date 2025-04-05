@@ -3,6 +3,9 @@
     const output = document.getElementById('output-text');
     const system = document.getElementById('log-system');
     const arrow = "> ";
+    
+    console.logConsole = function logConsole(args) { old.apply(console, arguments) }
+    
     console.log = function (message) {
         if (typeof message == 'object') {
             const text = (JSON && JSON.stringify ? JSON.stringify(message) : message) + '<br />'
