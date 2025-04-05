@@ -244,6 +244,17 @@ h3{
     align-self: center;
 }
 
+.status-item:nth-child(2) {
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+.status-item:nth-child(2):after {
+    content: ' | ';
+    align-self: center;
+    margin-top: -4px;
+}
+
 .loader {
     width: 48px;
     height: 48px;
