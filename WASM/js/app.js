@@ -75,7 +75,7 @@ codeTextarea.addEventListener('scroll', syncScroll);
 
 // Clear console buttons
 document.getElementById('clear-output-console').addEventListener('click', () => {
-    document.getElementById('log-output').innerHTML = '';
+    document.getElementById('output-text').innerHTML = '';
 });
 document.getElementById('clear-system-console').addEventListener('click', () => {
     document.getElementById('log-system').innerHTML = '';
@@ -99,6 +99,9 @@ document.addEventListener('keydown', (e) => {
         setTimeout(() => {
             copyToast.classList.remove('show');
         }, 2000);
+    }
+    else if(e.key === 'Escape'){
+        closeModal();
     }
 });
 
@@ -170,17 +173,22 @@ function syncScroll() {
 }
 
 document.getElementById("run").onclick = async () => {
-    document.getElementById("log-output").innerHTML = '';
-    document.getElementById("log-system").innerHTML = '';
+    const spinner = document.getElementById('spinner');
+    const output = document.getElementById('output-text');
+    const memory = document.getElementById('memory');
+    output.textContent = '';
+    document.getElementById("log-system").textContent = '';
 
     try {
+        statusItem.textContent = 'Running...';
+        spinner.style.display = 'inline-block';
         await run(codeTextarea.value);
         statusItem.textContent = 'Execution completed';
         statusBar.style.color = 'var(--success)';
+        spinner.style.display = 'none';
     } catch (error) {
         statusItem.textContent = 'Error';
         statusBar.style.color = 'var(--error)';
-        const output = document.getElementById('log-output');
         const text = (JSON && JSON.stringify ? JSON.stringify(error) : error) + '<br />'
         output.innerHTML += "> " + text;
     } finally {

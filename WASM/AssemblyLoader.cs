@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Runtime.InteropServices.JavaScript;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 #pragma warning disable IL2026
 #pragma warning disable IL2072
 #pragma warning disable IL2075
@@ -68,16 +69,21 @@ public static partial class AssemblyLoader
         _cachedReferences.AddRange(references);
         return _cachedReferences;
     }
-    
-    public static void EmitAndRun(CSharpCompilation compilation)
+
+    public static (EmitResult, MemoryStream) Emit(CSharpCompilation compilation)
     {
         var sw = Stopwatch.StartNew();
-        using var ms = new MemoryStream();
+        var ms = new MemoryStream();
         var result = compilation.Emit(ms);
         var outcome = result.Success ? "Success" : "Error";
         
         Console.WriteLine($"dbg: Emitted IL: {outcome} in {sw.ElapsedMilliseconds} ms");
 
+        return (result, ms);
+    }
+    
+    public static void Run(EmitResult result, MemoryStream ms)
+    {
         if (!result.Success)
         {
             var failures = result.Diagnostics.Where(diagnostic => 
@@ -110,6 +116,7 @@ public static partial class AssemblyLoader
             const BindingFlags flags = BindingFlags.Default | BindingFlags.InvokeMethod; 
                     
             type.InvokeMember("Main", flags, null, obj, [new[] {""}]);
+            ms.Dispose();
         }
     }
     

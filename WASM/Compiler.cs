@@ -3,6 +3,7 @@ using System.Runtime.InteropServices.JavaScript;
 using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace WASM;
 
@@ -17,7 +18,7 @@ public static partial class Compiler
             usings: Constants.DefaultUsings.Combine(additionalUsings));
     
     [JSExport]
-    public static async Task Compile(string src)
+    public static async Task PreCompile(string src)
     {
         try
         {
@@ -30,13 +31,29 @@ public static partial class Compiler
             Console.WriteLine($"dbg: ERROR: {e.Message}");
         }
     }
-
+    
     [JSExport]
-    public static async Task PreloadReferences()
+    public static async Task CompileAndRun(string src)
     {
         try
         {
-            _ = await AssemblyLoader.PreloadReferenceAssemblies();
+            var sw = Stopwatch.StartNew();
+            var (result, ms) = await CompileInternal(src);
+            AssemblyLoader.Run(result, ms);
+            Console.WriteLine("dbg: Finished in {0} ms", sw.ElapsedMilliseconds);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"dbg: ERROR: {e.Message}");
+        }
+    }
+
+    [JSExport]
+    public static async Task PreloadReferences(string src)
+    {
+        try
+        {
+            await AssemblyLoader.PreloadReferenceAssemblies();
         }
         catch (Exception e)
         {
@@ -44,7 +61,7 @@ public static partial class Compiler
         }
     }
     
-    static async Task CompileInternal(string src)
+    static async Task<(EmitResult, MemoryStream)> CompileInternal(string src)
     {
         var sw = Stopwatch.StartNew();
         var substitutedSrc = Regex.Replace(src, @"namespace\s+\w+", AssemblyLoader.NameSpace);
@@ -63,6 +80,6 @@ public static partial class Compiler
 
         Console.WriteLine($"dbg: Created compilation: {compilation.AssemblyName} in {sw.ElapsedMilliseconds} ms");
 
-        AssemblyLoader.EmitAndRun(compilation);
+        return AssemblyLoader.Emit(compilation);
     }
 }

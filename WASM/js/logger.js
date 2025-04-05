@@ -1,6 +1,6 @@
 (function () {
     const old = console.log;
-    const output = document.getElementById('log-output');
+    const output = document.getElementById('output-text');
     const system = document.getElementById('log-system');
     const arrow = "> ";
     console.log = function (message) {
