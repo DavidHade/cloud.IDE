@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-IE">
+<html lang="en-IE" xmlns="http://www.w3.org/1999/html">
 <head>
     <title>C# Cloud IDE</title>
     <link rel="icon" type="image/x-icon" href="./favicon.ico">
@@ -73,7 +73,12 @@
                         Clear
                     </button>
                 </div>
-                <div class="log-content" id="log-output"></div>
+                
+                <div class="log-content" id="log-output">
+                    <span id="spinner" class="loader" style="display: none; margin: 0 auto"></span>
+                    <span id="output-text"></span>
+                </div>
+                
             </div>
             <div class="child console" style="width: 100%; min-width: 100%">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
@@ -135,8 +140,9 @@
 <div class="toast" id="toast-copy">Copied to clipboard!</div>
 <div class="toast" id="toast-save">Autosave is on, no need to save manually</div>
 <script type="module">
-    import { preload } from './js/wasmRunner.js';
+    import { preload, precompile } from './js/wasmRunner.js';
     import { handleSavedState } from './js/app.js';
+    const codeTextarea = document.getElementById('code');
     
     //Runnable at page load
     handleSavedState();
