@@ -184,6 +184,7 @@ function handleError(error){
         ? JSON.stringify(error, Object.getOwnPropertyNames(error))
         : error) + '<br />'
     output.innerHTML += "> " + text;
+    spinner.style.display = 'none';
 }
 
 async function run (){

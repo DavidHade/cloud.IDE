@@ -1,7 +1,7 @@
 {
   "mainAssemblyName": "WASM",
   "resources": {
-    "hash": "sha256-Zd4i5Q7OGAcJRuMCrh6QGHvu0M67O6AZrtMI7pECb0A=",
+    "hash": "sha256-lgcm9OAAmIdaQFAH2Wwgut5izlp+kbnkLqQ1Kji23pQ=",
     "jsModuleNative": {
       "dotnet.native.8.0.14.ao03vwswak.js": "sha256-DTUQS6Jc6BNnS7sYYezFfaUKVmQq0/lanhQuJfygH/k="
     },
@@ -187,10 +187,10 @@
       "mscorlib.dll": "sha256-IK+SnG36ZowqXlMrGSO7DTw7fUyzAUCi0DguxLNsIXQ=",
       "netstandard.dll": "sha256-LMgbq5tO+BnNRiWG9d4y3TdVyaxDVhIYWNql2GOSGRA=",
       "System.Private.CoreLib.dll": "sha256-sHTOfvP2YMb0v2PIQBcyHTBaOEvda0YDT/RA5q7QndQ=",
-      "WASM.dll": "sha256-z5ODbs16CON2niA0M0Wh5K5+78ZMuaBTbEuChYCyou0="
+      "WASM.dll": "sha256-6mRM4fobKdz3HxC7CeYMxvLwQr+hDrEF1V3acbD0yek="
     },
     "pdb": {
-      "WASM.pdb": "sha256-P4nitkC/B8krmA3/XKRhQRPcEpGOTH6TZZEiol/Aups="
+      "WASM.pdb": "sha256-ga8XCiotJajVHpzcVQUHfzCyyjFZc1QKdVNWBMjUvaI="
     },
     "satelliteResources": {
       "cs": {
