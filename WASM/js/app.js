@@ -188,6 +188,7 @@ function handleError(error){
 
 async function run (){
     statusItem.textContent = 'Running...';
+    statusBar.style.color = 'var(--accent-hover)';
     spinner.style.display = 'inline-block';
     await compileAndRun(codeTextarea.value);
     statusItem.textContent = 'Execution completed';
