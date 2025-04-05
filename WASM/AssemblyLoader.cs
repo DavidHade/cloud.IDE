@@ -55,7 +55,8 @@ public static partial class AssemblyLoader
         return references;
     }
 
-    public static async Task<List<MetadataReference>> GetReferenceAssemblies(IEnumerable<string> additionalAssemblies)
+    public static async Task<List<MetadataReference>> GetReferenceAssemblies(
+        IEnumerable<string> additionalAssemblies)
     {
         var references = new List<MetadataReference>();
         var requiredAssemblies = additionalAssemblies.Where(x => !_cachedAssemblies.Contains(x)).ToArray();
@@ -142,10 +143,10 @@ public static partial class AssemblyLoader
             var response = await Client.GetAsync(assemblyUrl);
             if (response.IsSuccessStatusCode)
             {
-                var bytes = await response.Content.ReadAsByteArrayAsync();
+                var stream = await response.Content.ReadAsStreamAsync();
                 Console.WriteLine("dbg: Downloaded {0} in {1} ms", assembly, sw.ElapsedMilliseconds);
                 
-                return MetadataReference.CreateFromImage(bytes);
+                return MetadataReference.CreateFromStream(stream);
             }
         }
         catch (Exception e)
