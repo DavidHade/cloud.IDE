@@ -48,7 +48,7 @@
                     <textarea autofocus id="code" name="code" spellcheck="false"></textarea>
                 </div>
             </form>
-            <button id="run" class="run">
+            <button id="run" class="run" disabled>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polygon points="5 3 19 12 5 21 5 3"></polygon>
                 </svg>
@@ -108,7 +108,7 @@
             <line x1="12" y1="8" x2="12" y2="12"></line>
             <line x1="12" y1="16" x2="12.01" y2="16"></line>
         </svg>
-        <span>Ready</span>
+        <span>Loading assemblies...</span>
     </div>
     <div class="status-item">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -142,11 +142,18 @@
 <script type="module">
     import { preload, precompile } from './js/wasmRunner.js';
     import { handleSavedState } from './js/app.js';
-    const codeTextarea = document.getElementById('code');
+    const runBtn = document.getElementById('run');
+    const statusItem = document.querySelector('.status-item span');
+    const statusBar = document.querySelector('.status-bar');
     
-    //Runnable at page load
+    // Runnable at page load
+    runBtn.disabled = true;
     handleSavedState();
     await preload();
+    runBtn.disabled = false;
+    
+    statusItem.textContent = 'Ready';
+    statusBar.style.color = 'var(--text-secondary)';
 </script>
 <script type="text/javascript" src="js/logger.js"></script>
 <script type="text/javascript" src="js/modal.js"></script>

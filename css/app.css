@@ -167,6 +167,11 @@ h3{
     outline: none;
 }
 
+.run:disabled{
+    background-color: var(--editor-border);
+    outline: none;
+}
+
 .button-clear{
     background: none;
     color: var(--accent);
@@ -225,7 +230,7 @@ h3{
     display: flex;
     justify-content: space-between;
     font-size: 0.85rem;
-    color: var(--text-secondary);
+    color: var(--accent-hover);
     border-top: 1px solid var(--border-color);
     z-index: 10;
 }
@@ -233,6 +238,10 @@ h3{
 .status-item {
     display: flex;
     gap: 8px;
+}
+
+.status-item svg {
+    align-self: center;
 }
 
 .loader {
