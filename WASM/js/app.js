@@ -1,4 +1,4 @@
-﻿import { run } from './wasmRunner.js';
+﻿import { compileAndRun } from './wasmRunner.js';
 
 const codeTextarea = document.getElementById('code');
 const highlightedContent = document.getElementById('highlighted-content');
@@ -11,6 +11,9 @@ const storedValue = localStorage.getItem("cloudIDE");
 const urlParams = new URLSearchParams(window.location.search);
 const state = urlParams.get('state');
 const copyToast = document.getElementById("toast-save");
+const output = document.getElementById('output-text');
+const system = document.getElementById("log-system");
+const spinner = document.getElementById('spinner');
 
 // Initial code
 const initialCode = `using System;
@@ -74,18 +77,18 @@ codeTextarea.addEventListener('input', () => {
 codeTextarea.addEventListener('scroll', syncScroll);
 
 // Clear console buttons
-document.getElementById('clear-output-console').addEventListener('click', () => {
-    document.getElementById('output-text').innerHTML = '';
-});
-document.getElementById('clear-system-console').addEventListener('click', () => {
-    document.getElementById('log-system').innerHTML = '';
-});
-document.getElementById('clear-code-editor').addEventListener('click', (e) => {
+document.getElementById('clear-output-console').onclick = () => {
+    output.innerHTML = '';
+};
+document.getElementById('clear-system-console').onclick = () => {
+    system.innerHTML = '';
+};
+document.getElementById('clear-code-editor').onclick = (e) => {
     e.preventDefault();
     codeTextarea.value = minimalCode;
     localStorage.setItem("cloudIDE", codeTextarea.value);
     updateHighlightedCode();
-});
+};
 
 // Keyboard shortcut for running code
 document.addEventListener('keydown', (e) => {
@@ -172,25 +175,34 @@ function syncScroll() {
     lineNumbers.scrollTop = codeTextarea.scrollTop;
 }
 
+function handleError(error){
+    statusItem.textContent = 'Error';
+    statusBar.style.color = 'var(--error)';
+
+    console.logConsole(error);
+    const text = (JSON && JSON.stringify
+        ? JSON.stringify(error, Object.getOwnPropertyNames(error))
+        : error) + '<br />'
+    output.innerHTML += "> " + text;
+}
+
+async function run (){
+    statusItem.textContent = 'Running...';
+    spinner.style.display = 'inline-block';
+    await compileAndRun(codeTextarea.value);
+    statusItem.textContent = 'Execution completed';
+    statusBar.style.color = 'var(--success)';
+    spinner.style.display = 'none';
+}
+
 document.getElementById("run").onclick = async () => {
-    const spinner = document.getElementById('spinner');
-    const output = document.getElementById('output-text');
-    const memory = document.getElementById('memory');
     output.textContent = '';
-    document.getElementById("log-system").textContent = '';
+    system.textContent = '';
 
     try {
-        statusItem.textContent = 'Running...';
-        spinner.style.display = 'inline-block';
-        await run(codeTextarea.value);
-        statusItem.textContent = 'Execution completed';
-        statusBar.style.color = 'var(--success)';
-        spinner.style.display = 'none';
+        await run();
     } catch (error) {
-        statusItem.textContent = 'Error';
-        statusBar.style.color = 'var(--error)';
-        const text = (JSON && JSON.stringify ? JSON.stringify(error) : error) + '<br />'
-        output.innerHTML += "> " + text;
+        handleError(error);
     } finally {
         setTimeout(() => {
             statusItem.textContent = 'Ready';
