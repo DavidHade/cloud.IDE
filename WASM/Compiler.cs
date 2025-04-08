@@ -65,7 +65,7 @@ public static partial class Compiler
     {
         var sw = Stopwatch.StartNew();
         src = Utils.ReplaceNamespace(src);
-        src = Utils.WrapInTryCatch(src);
+        //src = Utils.WrapInTryCatch(src);
         var syntaxTree = CSharpSyntaxTree.ParseText(src);
         var assemblyName = Path.GetRandomFileName();
         var usings = Utils.ExtractUsings(src);
