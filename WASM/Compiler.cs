@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices.JavaScript;
-using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Emit;
@@ -18,7 +17,8 @@ public static partial class Compiler
             usings: Constants.DefaultUsings.Combine(additionalUsings));
     
     [JSExport]
-    public static async Task PreCompile(string src)
+    [Obsolete("Precompile blocks the UI thread for too long on startup.")]
+    private static async Task PreCompile(string src)
     {
         try
         {
@@ -33,7 +33,7 @@ public static partial class Compiler
     }
     
     [JSExport]
-    public static async Task CompileAndRun(string src)
+    private static async Task CompileAndRun(string src)
     {
         try
         {
@@ -44,12 +44,12 @@ public static partial class Compiler
         }
         catch (Exception e)
         {
-            Console.WriteLine($"dbg: ERROR: {e.Message}");
+            Console.WriteLine($"err: ERROR: {e}");
         }
     }
 
     [JSExport]
-    public static async Task PreloadReferences(string src)
+    private static async Task PreloadReferences()
     {
         try
         {
@@ -64,14 +64,14 @@ public static partial class Compiler
     static async Task<(EmitResult, MemoryStream)> CompileInternal(string src)
     {
         var sw = Stopwatch.StartNew();
-        var substitutedSrc = Regex.Replace(src, @"namespace\s+\w+", AssemblyLoader.NameSpace);
-        var syntaxTree = CSharpSyntaxTree.ParseText(substitutedSrc);
+        src = Utils.ReplaceNamespace(src);
+        src = Utils.WrapInTryCatch(src);
+        var syntaxTree = CSharpSyntaxTree.ParseText(src);
         var assemblyName = Path.GetRandomFileName();
-        var usings = Utils.ExtractUsings(substitutedSrc);
+        var usings = Utils.ExtractUsings(src);
         var additionalRefs = Constants.DefaultReferences.Where(x => usings.Any(x.Equals));
         var references = await AssemblyLoader.GetReferenceAssemblies(additionalRefs);
         
-        // analyse and generate IL code from syntax tree
         var compilation = CSharpCompilation.Create(
             assemblyName,
             syntaxTrees: [syntaxTree],
