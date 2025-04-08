@@ -19,7 +19,7 @@
             if (message.toString().startsWith('dbg:')){
                 system.innerHTML += arrow + message.substring(5, message.length) + '<br />';
             }else{
-                if (message.toString().startsWith('err: ')){
+                if (message.toString().startsWith('err:')){
                     const inner = arrow + message.substring(5, message.length) + '<br />';
                     output.innerHTML += `<span style="color: var(--error)">${inner}</span>`;
                 }else{
