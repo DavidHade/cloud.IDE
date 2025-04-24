@@ -6,6 +6,6 @@
  
 # Run locally
 ```console
-cd \WASM\bin\Release\net8.0-browser
+cd \WASM\bin\Release\net8.0
 python3 -m http.server
 ```

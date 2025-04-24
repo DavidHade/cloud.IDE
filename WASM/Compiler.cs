@@ -61,7 +61,7 @@ public static partial class Compiler
         }
     }
     
-    static async Task<(EmitResult, MemoryStream)> CompileInternal(string src)
+    private static async Task<(EmitResult, MemoryStream)> CompileInternal(string src)
     {
         var sw = Stopwatch.StartNew();
         src = Utils.ReplaceNamespace(src);
