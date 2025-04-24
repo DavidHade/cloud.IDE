@@ -120,6 +120,9 @@ codeTextarea.addEventListener('keydown', function(e) {
 
         // put caret at right position again
         this.selectionStart = this.selectionEnd = start + 1;
+
+        updateHighlightedCode();
+        localStorage.setItem("cloudIDE", codeTextarea.value);
     }
     else if(e.key === 'Enter'){
         let cursorPos = this.selectionStart;
